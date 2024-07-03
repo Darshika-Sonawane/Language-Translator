@@ -1,0 +1,300 @@
+WindowManager:
+    Welcome:
+    Choice:
+    text_translation:
+    doc_translation:
+    web_translation:
+    audio_translation:
+    speech_translation:
+
+<Welcome>:
+    name: 'welcome'
+    
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.width, root.height
+        padding: 100
+        spacing: 50
+
+        Image:
+            source: 'logo1.png'
+        
+<Choice>:
+    name: 'choice'
+    
+    Label:
+        text: "Enter your choice for Translation"
+        pos: 20, 130
+        font_size: 25
+
+    FloatLayout:
+        pos: 0,0
+        size: root.width, root.height
+
+        GridLayout:
+            cols: 2
+            pos_hint: {'x': .2, 'y': .3}
+            size_hint: None, None
+            size: root.width* .6, root.height* .3
+            spacing: 20
+
+            Button:
+                text: "Text"
+                background_color : "00FFCE"
+                on_release: app.root.current = 'text_translation'  # switch to a text_translation screen
+            Button:
+                text: "Document"
+                background_color : "00FFCE"
+                on_release: app.root.current = 'doc_translation'  # switch to a doc_translation screen
+            Button:
+                text: "Webpage"
+                background_color : "00FFCE"
+                on_release: app.root.current = 'web_translation'  # switch to a web_translation screen
+            Button:
+                text: "Audio"
+                background_color : "00FFCE"
+                on_release: app.root.current = 'audio_translation'  # switch to an audio_translation screen
+            Button:
+                text: "Speech"
+                background_color : "00FFCE"
+                on_release: app.root.current = 'speech_translation'  # switch to an audio_translation screen
+
+<text_translation>:
+    name: 'text_translation'
+    
+    Label:
+        text: "For Text Translation"
+    
+    TextInput:
+        id: user_input
+        multiline: True
+        size_hint: (0.8, 0.4)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.7}
+        font_name: 'Nirmala.ttf'
+
+    Spinner:
+        id: language_spinner
+        text: "Select Language"
+        values: ["en", "es", "mr", "hi", "ml", "fr", "ar", "bn", "zh-CN", "zh-TW", "hr", "cs", "da", "nl", "et", "fi", "de", "el", "gu", "iw", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "nb", "fa", "pl", "pt", "pa", "ro", "ru", "sr", "sk", "sl", "sw", "sv", "ta", "te", "th", "tr", "uk", "ur", "vi"]
+        size_hint: (0.5, 0.1)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+
+    Button:
+        text: "Translate Text"
+        background_color : "00FFCE"
+        size_hint: (0.3, 0.1)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        on_press: root.translate_text()
+
+    Label:
+        id: translation_label
+        text: "Translated Text: "
+        font_name: 'Nirmala.ttf'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+    
+    # go back to choice section
+    Button:
+        text: "Back"
+        background_color : "00FFCE"
+        on_release: app.root.current = 'choice'  # Navigate back to the 'Choice' screen
+        size_hint: None, None
+        size: 70,60
+        pos: 10,10
+
+<doc_translation>:
+    name: 'doc_translation'
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+
+        FileChooserIconView:
+            id: file_chooser
+            filters: ['*.pdf', '*.txt','*.docx']  # Allow both PDF and text files
+            on_submit: root.translate_document(self.selection)
+
+        Spinner:
+            id: language_spinner
+            text: "Select Language"
+            values: ["en", "es", "mr", "hi", "ml", "fr", "ar", "bn", "zh-CN", "zh-TW", "hr", "cs", "da", "nl", "et", "fi", "de", "el", "gu", "iw", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "nb", "fa", "pl", "pt", "pa", "ro", "ru", "sr", "sk", "sl", "sw", "sv", "ta", "te", "th", "tr", "uk", "ur", "vi"]
+            size_hint: (0.5, 0.1)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+
+        Button:
+            text: "Translate Document"
+            background_color : "00FFCE"
+            size_hint: (0.3, 0.1)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+            on_press: root.translate_document(file_chooser.selection)
+
+        ScrollView:
+            size_hint: (1, 0.5)  # Adjust the size of the ScrollView
+            TextInput:
+                id: translation_label
+                text: ""  # Initialize with empty text
+                font_name: 'Nirmala.ttf'
+                readonly: True
+                background_color: 0, 0, 0, 1
+                foreground_color: 1, 1, 1, 1
+                padding: 10, 10
+                size_hint_y: None
+                height: self.minimum_height  # Make the height adjust based on content
+
+        Button:
+            text: "Back"
+            background_color : "00FFCE"
+            on_release: app.root.current = 'choice'  # Navigate back to the 'Choice' screen
+            size_hint: None, None
+            size: 70,60
+            pos: 10,10
+
+
+<web_translation>:
+    name: 'web_translation'
+    Label:
+        text: "For Webpage Translation"
+    
+    TextInput:
+        id: web_url
+        multiline: False
+        size_hint: (0.8, 0.1)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.7}
+        font_name: 'Nirmala.ttf'
+
+    Spinner:
+        id: language_spinner
+        text: "Select Language"
+        values: ["en", "es", "mr", "hi", "ml", "fr", "ar", "bn", "zh-CN", "zh-TW", "hr", "cs", "da", "nl", "et", "fi", "de", "el", "gu", "iw", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "nb", "fa", "pl", "pt", "pa", "ro", "ru", "sr", "sk", "sl", "sw", "sv", "ta", "te", "th", "tr", "uk", "ur", "vi"]
+        size_hint: (0.5, 0.1)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+
+    Button:
+        text: "Translate Webpage"
+        background_color : "00FFCE"
+        size_hint: (0.3, 0.1)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        on_press: root.translate_webpage()
+
+    Label:
+        id: translation_label
+        text: "Translated URL: "
+        pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+    
+    # go back to choice section
+    Button:
+        text: "Back"
+        background_color : "00FFCE"
+        on_release: app.root.current = 'choice'  # Navigate back to the 'Choice' screen
+        size_hint: None, None
+        size: 70,60
+        pos: 10,10
+
+<audio_translation>:
+    name: 'audio_translation'
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: 10
+        #spacing: 10
+
+        FileChooserIconView:
+            id: file_chooser
+            filters: ["*.wav", "*.mp3","*.aiff","*.flac","*.ogg"]
+            on_submit: root.translate_audio(self.selection[0])
+
+
+        Spinner:
+            id: language_spinner
+            text: "Select Language"
+            values: ["en", "es", "mr", "hi", "ml", "fr", "ar", "bn", "zh-CN", "zh-TW", "hr", "cs", "da", "nl", "et", "fi", "de", "el", "gu", "iw", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "nb", "fa", "pl", "pt", "pa", "ro", "ru", "sr", "sk", "sl", "sw", "sv", "ta", "te", "th", "tr", "uk", "ur", "vi"]
+            size_hint: (0.5, 0.1)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+        Button:
+            text: "Translate Audio"
+            background_color : "00FFCE"
+            size_hint: (0.3, 0.1)
+            font_name: 'Nirmala.ttf'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+            on_press: root.translate_audio(file_chooser.selection)
+
+        Label:
+            id: translation_label
+            text: ""
+            font_name: 'Nirmala.ttf'
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        Button:
+            text: "Back"
+            background_color : "00FFCE"
+            on_release: app.root.current = 'choice'  # Navigate back to the 'Choice' screen
+            size_hint: None, None
+            size: 70,60
+            pos: 10,10
+
+<speech_translation>:
+    name: 'speech_translation'
+
+    Label:
+        id: recording_label
+        text: ""
+        pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+
+    Spinner:
+        id: input_language_spinner
+        text: "Select Input Language"
+        values: ["en", "es", "mr", "hi", "ml", "fr", "ar", "bn", "zh-CN", "zh-TW", "hr", "cs", "da", "nl", "et", "fi", "de", "el", "gu", "iw", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "nb", "fa", "pl", "pt", "pa", "ro", "ru", "sr", "sk", "sl", "sw", "sv", "ta", "te", "th", "tr", "uk", "ur", "vi"]
+        size_hint: (0.5, 0.1)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.7}
+        on_press: root.on_input_language_spinner_select(self, self.text)
+
+    Button:
+        text: "Start Recording"
+        background_color: "00FFCE"
+        size_hint: (0.3, 0.1)
+        pos_hint: {'center_x': 0.35, 'center_y': 0.6}
+        on_press: root.start_recording()
+
+    Button:
+        text: "Stop Recording"
+        background_color: "00FFCE"
+        size_hint: (0.3, 0.1)
+        pos_hint: {'center_x': 0.65, 'center_y': 0.6}
+        on_press: root.stop_recording()
+
+    TextInput:
+        id: user_input
+        multiline: True
+        size_hint: (0.8, 0.2)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+        font_name: 'Nirmala.ttf'
+
+    Spinner:
+        id: target_language_spinner
+        text: "Select Target Language"
+        values: ["en", "es", "mr", "hi", "ml", "fr", "ar", "bn", "zh-CN", "zh-TW", "hr", "cs", "da", "nl", "et", "fi", "de", "el", "gu", "iw", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "nb", "fa", "pl", "pt", "pa", "ro", "ru", "sr", "sk", "sl", "sw", "sv", "ta", "te", "th", "tr", "uk", "ur", "vi"]
+        size_hint: (0.5, 0.1)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+        on_press: root.on_target_language_spinner_select(self, self.text)
+
+    Button:
+        text: "Translate Speech"
+        background_color: "00FFCE"
+        size_hint: (0.3, 0.1)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+        on_press: root.translate_speech()
+
+    Label:
+        id: translation_label
+        text: "Translated Speech: "
+        font_name: 'Nirmala.ttf'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.1}
+    
+    Button:
+        text: "Back"
+        background_color: "00FFCE"
+        on_release: app.root.current = 'choice'  # Navigate back to the 'Choice' screen
+        size_hint: None, None
+        size: 70, 60
+        pos: 10, 10
